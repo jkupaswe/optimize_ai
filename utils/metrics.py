@@ -86,7 +86,7 @@ def count_tokens_claude(text: str, model: str = "claude-sonnet-4-20250514") -> i
         Number of tokens.
     
     Raises:
-        ValueError: If text is invalid or Anthropic library not available.
+        ValueError: If text is invalid, the Anthropic library is not available, or ANTHROPIC_API_KEY is not set.
         RuntimeError: If API call fails.
     """
     if not isinstance(text, str):
@@ -98,9 +98,7 @@ def count_tokens_claude(text: str, model: str = "claude-sonnet-4-20250514") -> i
     # Get API key from environment variable
     api_key = os.getenv('ANTHROPIC_API_KEY')
     if not api_key:
-        # Fallback to hardcoded key for testing (not recommended for production)
-        api_key = "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"
-        logger.warning("Using hardcoded API key. Set ANTHROPIC_API_KEY environment variable for production.")
+        raise ValueError("ANTHROPIC_API_KEY environment variable is not set")
     
     try:
         client = anthropic.Anthropic(api_key=api_key)
